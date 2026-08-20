@@ -202,6 +202,91 @@ function initYear() {
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 }
 
+function addMediaQueryListener(query, handler) {
+  if (typeof query.addEventListener === 'function') {
+    query.addEventListener('change', handler);
+  } else if (typeof query.addListener === 'function') {
+    // Safari < 14 fallback.
+    query.addListener(handler);
+  }
+}
+
+/**
+ * Pins the hero photograph and tilts it away in 3D as the reader scrolls
+ * past it, so the image reads as a backdrop the recipes emerge from rather
+ * than a fixed banner. Only runs on wide screens with motion allowed; the
+ * photo is a plain static image everywhere else (see .hero base styles).
+ */
+function initHeroPeel() {
+  const hero = document.querySelector('#hero');
+  const photo = document.querySelector('#heroPhoto');
+  if (!hero || !photo) return;
+
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const narrowViewportQuery = window.matchMedia('(max-width: 860px)');
+
+  let peelActive = false;
+  let frameRequested = false;
+
+  function resetPhoto() {
+    photo.style.transform = '';
+    photo.style.opacity = '';
+  }
+
+  function updatePeel() {
+    frameRequested = false;
+    if (!peelActive) return;
+
+    const rect = hero.getBoundingClientRect();
+    const scrollRange = rect.height - window.innerHeight;
+    if (scrollRange <= 0) {
+      resetPhoto();
+      return;
+    }
+
+    const progress = Math.min(Math.max(-rect.top / scrollRange, 0), 1);
+    // Smoothstep easing so the peel starts and ends gently.
+    const eased = progress * progress * (3 - 2 * progress);
+
+    photo.style.transform = [
+      'rotate(-1deg)',
+      `rotateX(${(eased * -68).toFixed(2)}deg)`,
+      `translateY(${(eased * -16).toFixed(2)}%)`,
+      `translateZ(${(eased * -260).toFixed(1)}px)`,
+      `scale(${(1 - eased * 0.16).toFixed(3)})`,
+    ].join(' ');
+    photo.style.opacity = (1 - eased * 0.92).toFixed(3);
+  }
+
+  function requestUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updatePeel);
+  }
+
+  function applyMode() {
+    const shouldPeel = !reducedMotionQuery.matches && !narrowViewportQuery.matches;
+    if (shouldPeel === peelActive) return;
+    peelActive = shouldPeel;
+    hero.classList.toggle('hero--peel', peelActive);
+    if (peelActive) {
+      requestUpdate();
+    } else {
+      resetPhoto();
+    }
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', () => {
+    applyMode();
+    requestUpdate();
+  });
+  addMediaQueryListener(reducedMotionQuery, applyMode);
+  addMediaQueryListener(narrowViewportQuery, applyMode);
+
+  applyMode();
+}
+
 function init() {
   readUrlState();
   for (const recipe of RECIPES) {
@@ -209,6 +294,7 @@ function init() {
   }
   initUnitToggle();
   initYear();
+  initHeroPeel();
   renderAll();
 }
 
