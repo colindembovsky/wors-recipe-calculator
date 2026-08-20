@@ -188,6 +188,13 @@ function initRecipeCard(recipe) {
   const errorEl = card.querySelector('.field-error');
 
   input.addEventListener('input', () => handleBeefInput(recipe, input, errorEl));
+  input.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return;
+
+    event.preventDefault();
+    handleBeefInput(recipe, input, errorEl);
+    input.blur();
+  });
 
   const resetButton = card.querySelector('.reset-button');
   resetButton.addEventListener('click', () => handleReset(recipe));
@@ -219,10 +226,9 @@ function addMediaQueryListener(query, handler) {
 }
 
 /**
- * Pins the hero photograph and tilts it away in 3D as the reader scrolls
- * past it, so the image reads as a backdrop the recipes emerge from rather
- * than a fixed banner. Only runs on wide screens with motion allowed; the
- * photo is a plain static image everywhere else (see .hero base styles).
+ * Fades the hero photograph as the reader scrolls past it. On wide screens,
+ * it also pins and tilts away in 3D so the recipes appear to emerge from it.
+ * Reduced-motion users keep the plain static image (see .hero base styles).
  */
 function initHeroPeel() {
   const hero = document.querySelector('#hero');
@@ -232,7 +238,8 @@ function initHeroPeel() {
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const narrowViewportQuery = window.matchMedia('(max-width: 860px)');
 
-  let peelActive = false;
+  /** @type {'static'|'fade'|'peel'} */
+  let motionMode = 'static';
   let frameRequested = false;
 
   function resetPhoto() {
@@ -242,9 +249,22 @@ function initHeroPeel() {
 
   function updatePeel() {
     frameRequested = false;
-    if (!peelActive) return;
+    if (motionMode === 'static') return;
 
     const rect = hero.getBoundingClientRect();
+    if (motionMode === 'fade') {
+      const fadeStart = window.innerHeight * 0.18;
+      const fadeEnd = rect.height * -0.55;
+      const progress = Math.min(
+        Math.max((fadeStart - rect.top) / Math.max(fadeStart - fadeEnd, 1), 0),
+        1,
+      );
+      const eased = progress * progress * (3 - 2 * progress);
+      photo.style.transform = '';
+      photo.style.opacity = (1 - eased).toFixed(3);
+      return;
+    }
+
     const scrollRange = rect.height - window.innerHeight;
     if (scrollRange <= 0) {
       resetPhoto();
@@ -272,15 +292,18 @@ function initHeroPeel() {
   }
 
   function applyMode() {
-    const shouldPeel = !reducedMotionQuery.matches && !narrowViewportQuery.matches;
-    if (shouldPeel === peelActive) return;
-    peelActive = shouldPeel;
-    hero.classList.toggle('hero--peel', peelActive);
-    if (peelActive) {
-      requestUpdate();
-    } else {
-      resetPhoto();
-    }
+    const nextMode = reducedMotionQuery.matches
+      ? 'static'
+      : narrowViewportQuery.matches
+        ? 'fade'
+        : 'peel';
+    if (nextMode === motionMode) return;
+
+    motionMode = nextMode;
+    hero.classList.toggle('hero--peel', motionMode === 'peel');
+    hero.classList.toggle('hero--fade', motionMode === 'fade');
+    resetPhoto();
+    requestUpdate();
   }
 
   window.addEventListener('scroll', requestUpdate, { passive: true });

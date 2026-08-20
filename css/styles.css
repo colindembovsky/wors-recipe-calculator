@@ -230,9 +230,8 @@ a {
 /* ---------- Hero photograph ----------
    Static by default: a full-width photograph with no motion, so the page
    works without JavaScript and for anyone who prefers reduced motion.
-   js/app.js adds the `hero--peel` modifier on wide screens with motion
-   allowed, which pins the photo and lets script drive a 3D scroll-peel
-   (see .hero--peel rules and initHeroPeel in js/app.js). */
+   js/app.js adds `hero--fade` on narrow screens and `hero--peel` on wide
+   screens when motion is allowed (see initHeroPeel in js/app.js). */
 
 .hero {
   max-width: 1180px;
@@ -284,6 +283,10 @@ a {
   letter-spacing: 0.02em;
   text-align: center;
   color: var(--color-charcoal-soft);
+}
+
+.hero--fade .hero__photo {
+  will-change: opacity;
 }
 
 /* Scroll-peel mode: js/app.js toggles this class after checking
