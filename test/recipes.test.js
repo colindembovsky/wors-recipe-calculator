@@ -8,7 +8,6 @@ import {
   scaleRecipe,
   validateBeefGrams,
   MIN_BEEF_GRAMS,
-  MAX_BEEF_GRAMS,
 } from '../js/recipes.js';
 
 test('RECIPES exposes both droëwors and boerewors', () => {
@@ -86,11 +85,10 @@ test('validateBeefGrams rejects non-finite, negative and zero values', () => {
   assert.ok(validateBeefGrams('800'));
 });
 
-test('validateBeefGrams enforces min/max bounds', () => {
+test('validateBeefGrams enforces the minimum without an upper limit', () => {
   assert.ok(validateBeefGrams(MIN_BEEF_GRAMS - 1));
   assert.equal(validateBeefGrams(MIN_BEEF_GRAMS), null);
-  assert.equal(validateBeefGrams(MAX_BEEF_GRAMS), null);
-  assert.ok(validateBeefGrams(MAX_BEEF_GRAMS + 1));
+  assert.equal(validateBeefGrams(1_000_000_000), null);
 });
 
 test('validateBeefGrams accepts decimal quantities within range', () => {

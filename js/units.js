@@ -5,7 +5,6 @@
 export const G_PER_OZ = 28.349523125;
 export const G_PER_LB = G_PER_OZ * 16;
 export const ML_PER_TBSP = 14.7868; // 1 US tablespoon
-export const ML_PER_US_FL_OZ = ML_PER_TBSP * 2;
 
 /**
  * Convert grams to ounces.
@@ -59,15 +58,6 @@ export function mlToTbsp(ml) {
  */
 export function tbspToMl(tbsp) {
   return tbsp * ML_PER_TBSP;
-}
-
-/**
- * Convert millilitres to US fluid ounces.
- * @param {number} ml
- * @returns {number}
- */
-export function mlToUsFluidOunces(ml) {
-  return ml / ML_PER_US_FL_OZ;
 }
 
 /**
@@ -147,10 +137,8 @@ export function formatSpiceGrams(grams) {
 }
 
 /**
- * Liquids always display in US tablespoons, followed by millilitres in metric
- * mode or US fluid ounces in imperial mode.
+ * Liquids always display in US tablespoons followed by millilitres.
  * @param {number} ml
- * @param {'metric'|'imperial'} system
  * @returns {{
  *   value: string,
  *   unit: string,
@@ -159,21 +147,18 @@ export function formatSpiceGrams(grams) {
  *   text: string
  * }}
  */
-export function formatLiquidTbsp(ml, system) {
+export function formatLiquidTbsp(ml) {
   const tbsp = mlToTbsp(ml);
   const decimals = tbsp < 10 ? 2 : 1;
   const value = formatNumber(tbsp, decimals);
-  const secondaryValue = system === 'imperial'
-    ? formatNumber(mlToUsFluidOunces(ml), 2)
-    : formatNumber(ml, ml < 10 ? 1 : 0);
-  const secondaryUnit = system === 'imperial' ? 'US fl oz' : 'ml';
+  const secondaryValue = formatNumber(ml, ml < 10 ? 1 : 0);
 
   return {
     value,
     unit: 'tbsp',
     secondaryValue,
-    secondaryUnit,
-    text: `${value} tbsp / ${secondaryValue} ${secondaryUnit}`,
+    secondaryUnit: 'ml',
+    text: `${value} tbsp / ${secondaryValue} ml`,
   };
 }
 
