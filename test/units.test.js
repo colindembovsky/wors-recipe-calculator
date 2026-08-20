@@ -16,6 +16,7 @@ import {
   formatTemperature,
   inputToGrams,
   gramsToInput,
+  formatBeefAmount,
 } from '../js/units.js';
 
 test('gramsToOunces / ouncesToGrams round-trip', () => {
@@ -88,18 +89,28 @@ test('formatTemperature switches unit label with system', () => {
   assert.equal(formatTemperature(71, 'imperial'), '160°F');
 });
 
-test('inputToGrams / gramsToInput preserve the entered beef amount without drift', () => {
-  // Entering 800 g in metric mode should read back as 800 g.
-  assert.equal(gramsToInput(inputToGrams(800, 'metric'), 'metric'), 800);
+test('inputToGrams / gramsToInput read and write the beef amount in kg or lb', () => {
+  // Entering 0.8 kg in metric mode is the droëwors baseline: 800 g.
+  assert.equal(inputToGrams(0.8, 'metric'), 800);
+  assert.equal(gramsToInput(800, 'metric'), 0.8);
 
-  // Entering 600 g and switching to imperial and back to metric must not drift.
-  const canonicalGrams = inputToGrams(600, 'metric');
+  // Entering 0.6 kg in metric mode is the boerewors baseline: 600 g.
+  assert.equal(inputToGrams(0.6, 'metric'), 600);
+  assert.equal(gramsToInput(600, 'metric'), 0.6);
+
+  // Round-tripping metric kg through imperial lb and back must not drift.
+  const canonicalGrams = inputToGrams(0.6, 'metric');
   const imperialDisplay = gramsToInput(canonicalGrams, 'imperial');
   const backToGrams = inputToGrams(imperialDisplay, 'imperial');
-  // The canonical value used for calculations never actually changes on a
-  // pure unit toggle in the app (only the display recomputes from the same
-  // canonical grams), but this checks the conversion functions themselves
-  // are accurate enough that re-deriving grams from a rounded oz display
-  // stays within a gram of the original.
   assert.ok(Math.abs(backToGrams - canonicalGrams) < 1);
+});
+
+test('formatBeefAmount reports kg for metric and lb for imperial', () => {
+  const metric = formatBeefAmount(800, 'metric');
+  assert.equal(metric.unit, 'kg');
+  assert.equal(metric.text, '0.8 kg');
+
+  const imperial = formatBeefAmount(800, 'imperial');
+  assert.equal(imperial.unit, 'lb');
+  assert.ok(Math.abs(parseFloat(imperial.value) - 1.76) < 0.01);
 });

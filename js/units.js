@@ -163,24 +163,45 @@ export function formatTemperature(celsius, system) {
 
 /**
  * Convert a beef-quantity input value (in the unit currently shown to the
- * user) into canonical grams. This is the single place raw user input is
- * turned into the internal source of truth, so toggling display units never
- * re-derives the canonical amount from a previously rounded display value.
+ * user — kg for metric, lb for imperial) into canonical grams. This is the
+ * single place raw user input is turned into the internal source of truth,
+ * so toggling display units never re-derives the canonical amount from a
+ * previously rounded display value.
  * @param {number} amount
  * @param {'metric'|'imperial'} system
  * @returns {number} grams
  */
 export function inputToGrams(amount, system) {
-  return system === 'imperial' ? ouncesToGrams(amount) : amount;
+  return system === 'imperial' ? poundsToGrams(amount) : amount * 1000;
 }
 
 /**
  * Convert canonical grams into the display value shown in the beef-quantity
- * input for the given unit system (g for metric, oz for imperial).
+ * input for the given unit system (kg for metric, lb for imperial). Rounded
+ * to three decimal places, roughly gram-level precision in either unit, so
+ * repeated unit switching doesn't visibly drift the entered amount.
  * @param {number} grams
  * @param {'metric'|'imperial'} system
  * @returns {number}
  */
 export function gramsToInput(grams, system) {
-  return system === 'imperial' ? roundTo(gramsToOunces(grams), 2) : roundTo(grams, 1);
+  return system === 'imperial' ? roundTo(gramsToPounds(grams), 3) : roundTo(grams / 1000, 3);
+}
+
+/**
+ * Format canonical grams as the kg/lb amount shown in beef-quantity labels
+ * (the reset button, for example) that read a value rather than accept one.
+ * Unlike formatMass, this never switches down to g/oz, since the beef input
+ * itself is always entered in kg or lb.
+ * @param {number} grams
+ * @param {'metric'|'imperial'} system
+ * @returns {{ value: string, unit: string, text: string }}
+ */
+export function formatBeefAmount(grams, system) {
+  if (system === 'imperial') {
+    const value = formatNumber(gramsToPounds(grams), 2);
+    return { value, unit: 'lb', text: `${value} lb` };
+  }
+  const value = formatNumber(grams / 1000, 2);
+  return { value, unit: 'kg', text: `${value} kg` };
 }
