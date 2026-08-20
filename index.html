@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wors Recipe Calculator: Droëwors &amp; Boerewors</title>
+  <meta
+    name="description"
+    content="Scale droëwors and boerewors ingredient quantities from any amount of beef, with metric or imperial units, method and food-safety notes."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,600;0,700;1,500&family=Courier+Prime:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <p class="site-header__kicker">Butcher's ledger no. 2</p>
+      <h1 class="site-header__title">Wors Recipe Calculator</h1>
+      <p class="site-header__subtitle">
+        Enter your beef weight, get every other ingredient scaled to match. Two South African
+        sausages, two different formulas.
+      </p>
+    </div>
+
+    <div class="unit-switch">
+      <label for="unit-toggle" class="unit-switch__label">Units</label>
+      <select id="unit-toggle" class="unit-switch__select">
+        <option value="metric">Metric (g / kg / °C)</option>
+        <option value="imperial">Imperial (oz / lb / °F)</option>
+      </select>
+      <p class="unit-switch__note">Spices always in grams. Liquids always in tbsp.</p>
+    </div>
+  </header>
+
+  <div class="hero">
+    <figure class="hero__photo">
+      <img
+        src="assets/hero-boerewors.jpg"
+        alt="A coiled ring of raw boerewors on a wooden board at sunrise, next to bowls of coriander, pepper, salt and other spices, a meat grinder and a bowl of diced meat, with a farmhouse and misty fields visible through the window behind."
+        width="1536"
+        height="1024"
+        loading="eager"
+      />
+      <figcaption class="hero__caption">Fresh boerewors, coiled and ready for the casing. First light, farm kitchen.</figcaption>
+    </figure>
+  </div>
+
+  <main id="main">
+    <section class="recipe-card" data-recipe="droewors" aria-labelledby="droewors-heading">
+      <div class="recipe-card__header">
+        <h2 id="droewors-heading" class="recipe-card__title">Droëwors</h2>
+        <p class="recipe-card__tagline">Air-dried, spiced beef sausage</p>
+      </div>
+
+      <form class="calculator" novalidate>
+        <div class="field">
+          <label for="droewors-beef">Beef weight</label>
+          <div class="field__input-group">
+            <input
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="0"
+              id="droewors-beef"
+              class="beef-input"
+              aria-describedby="droewors-beef-error"
+              value="800"
+            />
+            <span class="beef-unit-label" aria-hidden="true">g</span>
+          </div>
+          <p id="droewors-beef-error" class="field-error" role="alert" aria-live="polite"></p>
+        </div>
+        <button type="button" class="reset-button">Reset to 800 g baseline</button>
+      </form>
+
+      <div class="results" aria-live="polite">
+        <p class="batch-summary">
+          Total batch (excluding liquids): <strong class="batch-total">1,035.5 g</strong>
+        </p>
+
+        <div class="ingredient-groups">
+          <div class="ingredient-group">
+            <h3>Meat</h3>
+            <table class="ingredients-meat">
+              <caption class="visually-hidden">Meat quantities for droëwors</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="ingredient-group">
+            <h3>Spices &amp; salt</h3>
+            <table class="ingredients-spice">
+              <caption class="visually-hidden">Spice quantities for droëwors, always in grams</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="ingredient-group">
+            <h3>Liquids</h3>
+            <table class="ingredients-liquid">
+              <caption class="visually-hidden">Liquid quantities for droëwors, always in US tablespoons</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="casing-note-wrapper">
+          <strong>Casing:</strong> <span class="casing-note"></span>
+        </p>
+      </div>
+
+      <div class="recipe-card__details">
+        <div class="method">
+          <h3>Method</h3>
+          <ol>
+            <li>Keep the beef and fat as cold as possible (partially frozen is ideal) and grind on a coarse plate.</li>
+            <li>Toast the coriander seed lightly, then crack it coarsely. Do not grind it to a powder.</li>
+            <li>Mix the ground meat with salt, coriander, pepper, cloves and nutmeg, then add the vinegar and Worcestershire sauce.</li>
+            <li>Mix by hand until the mixture becomes tacky and evenly combined, working quickly to keep everything cold.</li>
+            <li>Stuff firmly into sheep casings, twisting into long lengths, and hang in a well-ventilated, cool, dry, low-humidity space out of direct sun.</li>
+            <li>Dry for several days to a week or more, depending on conditions, until the sausage has lost at least half its original weight. Check that the centre is uniformly dry, not only the outside.</li>
+            <li>Once fully dried, store refrigerated in a sealed container or freeze for longer keeping.</li>
+          </ol>
+        </div>
+
+        <div class="safety" role="note" aria-label="Droëwors safety and storage guidance">
+          <h3>Safety &amp; storage</h3>
+          <ul>
+            <li>This recipe air-dries raw ground beef, so sanitation, cold handling and a controlled, well-ventilated drying environment matter far more than they would for a cooked sausage.</li>
+            <li>Dry to at least 50% weight loss from the fresh, stuffed weight, and cut open a thick strand to confirm the centre is uniformly dry. A moist core is a food-safety risk.</li>
+            <li>Droëwors is not shelf-stable at room temperature. Keep it refrigerated once dried, or freeze it for longer storage; do not leave it unrefrigerated for extended periods.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="recipe-card recipe-card--boerewors" data-recipe="boerewors" aria-labelledby="boerewors-heading">
+      <div class="recipe-card__header">
+        <h2 id="boerewors-heading" class="recipe-card__title">Boerewors</h2>
+        <p class="recipe-card__tagline">Fresh, coiled beef &amp; pork sausage</p>
+      </div>
+
+      <form class="calculator" novalidate>
+        <div class="field">
+          <label for="boerewors-beef">Beef weight</label>
+          <div class="field__input-group">
+            <input
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="0"
+              id="boerewors-beef"
+              class="beef-input"
+              aria-describedby="boerewors-beef-error"
+              value="600"
+            />
+            <span class="beef-unit-label" aria-hidden="true">g</span>
+          </div>
+          <p id="boerewors-beef-error" class="field-error" role="alert" aria-live="polite"></p>
+        </div>
+        <button type="button" class="reset-button">Reset to 600 g baseline</button>
+      </form>
+
+      <div class="results" aria-live="polite">
+        <p class="batch-summary">
+          Total batch (excluding liquids): <strong class="batch-total">1,027.2 g</strong>
+        </p>
+
+        <div class="ingredient-groups">
+          <div class="ingredient-group">
+            <h3>Meat</h3>
+            <table class="ingredients-meat">
+              <caption class="visually-hidden">Meat quantities for boerewors</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="ingredient-group">
+            <h3>Spices &amp; salt</h3>
+            <table class="ingredients-spice">
+              <caption class="visually-hidden">Spice quantities for boerewors, always in grams</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="ingredient-group">
+            <h3>Liquids</h3>
+            <table class="ingredients-liquid">
+              <caption class="visually-hidden">Liquid quantities for boerewors, always in US tablespoons</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ingredient</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="casing-note-wrapper">
+          <strong>Casing:</strong> <span class="casing-note"></span>
+        </p>
+      </div>
+
+      <div class="recipe-card__details">
+        <div class="method">
+          <h3>Method</h3>
+          <ol>
+            <li>Keep the beef and pork belly well chilled and grind separately on a coarse plate, then combine.</li>
+            <li>Toast the coriander seed lightly, then crack it coarsely. Visible flecks of coriander are part of what makes boerewors look and taste like boerewors.</li>
+            <li>Mix the ground meats with salt, coriander, pepper, cloves and nutmeg, then add the vinegar and Worcestershire sauce.</li>
+            <li>Mix by hand just until tacky and evenly combined. Overmixing makes the sausage dense instead of open-textured.</li>
+            <li>Stuff loosely into hog casings and coil, twisting only occasionally to keep the traditional continuous coil rather than short links.</li>
+            <li>Rest the coiled sausage, uncovered, in the refrigerator for a few hours (or overnight) to let the casing dry slightly and the flavours settle before cooking.</li>
+            <li>Grill, pan-fry or braai over moderate heat, turning gently, until cooked through.</li>
+          </ol>
+        </div>
+
+        <div class="safety" role="note" aria-label="Boerewors safety and storage guidance">
+          <h3>Safety &amp; storage</h3>
+          <ul>
+            <li>Boerewors is a fresh sausage. It is not cured or dried, so cook it fully to an internal temperature of at least <span data-temp-c="71">71°C</span> before eating.</li>
+            <li>Do not prick the casing while cooking; piercing it lets rendered fat and juices escape and dries out the sausage.</li>
+            <li>Refrigerate fresh, uncooked boerewors for 1–2 days at most, or freeze it for longer storage; thaw in the refrigerator before cooking.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Baseline quantities are starting formulas, not guarantees. Adjust to taste, and always
+      follow safe handling and drying/cooking practices for the method you're using.
+    </p>
+    <p class="site-footer__meta">&copy; <span id="current-year">2026</span> Wors Recipe Calculator</p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
