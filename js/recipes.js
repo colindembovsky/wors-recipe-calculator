@@ -94,7 +94,6 @@ export const BOEREWORS = {
 export const RECIPES = [DROEWORS, BOEREWORS];
 
 export const MIN_BEEF_GRAMS = 50;
-export const MAX_BEEF_GRAMS = 20000;
 
 /**
  * Compute the scale factor for a recipe given an entered beef mass.
@@ -140,9 +139,6 @@ export function validateBeefGrams(grams) {
   }
   if (grams < MIN_BEEF_GRAMS) {
     return `Enter at least ${(MIN_BEEF_GRAMS / 1000).toFixed(2)} kg (about ${gramsToPounds(MIN_BEEF_GRAMS).toFixed(2)} lb).`;
-  }
-  if (grams > MAX_BEEF_GRAMS) {
-    return `Enter at most ${(MAX_BEEF_GRAMS / 1000).toFixed(0)} kg (about ${gramsToPounds(MAX_BEEF_GRAMS).toFixed(1)} lb).`;
   }
   return null;
 }
