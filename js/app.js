@@ -84,7 +84,7 @@ function buildIngredientRow(ingredient) {
   amountCell.className = `amount amount--${ingredient.category}`;
   let formatted;
   if (ingredient.category === 'liquid') {
-    formatted = formatLiquidTbsp(ingredient.amount);
+    formatted = formatLiquidTbsp(ingredient.amount, unitSystem);
   } else if (ingredient.category === 'spice') {
     formatted = formatSpiceGrams(ingredient.amount);
   } else {

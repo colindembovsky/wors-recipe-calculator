@@ -7,6 +7,7 @@ import {
   poundsToGrams,
   mlToTbsp,
   tbspToMl,
+  mlToUsFluidOunces,
   celsiusToFahrenheit,
   roundTo,
   formatNumber,
@@ -36,6 +37,7 @@ test('mlToTbsp / tbspToMl use the US tablespoon (14.7868 ml)', () => {
   assert.ok(Math.abs(mlToTbsp(14.7868) - 1) < 1e-9);
   assert.ok(Math.abs(tbspToMl(1) - 14.7868) < 1e-9);
   assert.ok(Math.abs(mlToTbsp(30) - 2.0288) < 0.001);
+  assert.ok(Math.abs(mlToUsFluidOunces(29.5736) - 1) < 1e-9);
 });
 
 test('celsiusToFahrenheit converts the boerewors safe cook temperature', () => {
@@ -78,10 +80,12 @@ test('formatSpiceGrams always reports grams regardless of unit system', () => {
   assert.equal(formatSpiceGrams(2.5).text, '2.5 g');
 });
 
-test('formatLiquidTbsp always reports US tablespoons', () => {
-  const result = formatLiquidTbsp(30);
-  assert.equal(result.unit, 'tbsp');
-  assert.ok(Math.abs(parseFloat(result.value) - 2.03) < 0.01);
+test('formatLiquidTbsp reports tbsp with ml or US fl oz', () => {
+  const metric = formatLiquidTbsp(30, 'metric');
+  assert.equal(metric.text, '2.03 tbsp / 30 ml');
+
+  const imperial = formatLiquidTbsp(30, 'imperial');
+  assert.equal(imperial.text, '2.03 tbsp / 1.01 US fl oz');
 });
 
 test('formatTemperature switches unit label with system', () => {
