@@ -1,9 +1,9 @@
 # Wors Recipe Calculator
 
 A static calculator for scaling two South African sausage recipes, droëwors and
-boerewors, from any amount of beef. Enter the beef weight for a recipe and every
-other ingredient (spices, liquids, fat or pork belly) scales with it, in metric or
-imperial units.
+boerewors, from any amount of beef. Enter the total lean-and-fat beef weight for
+droëwors or the lean beef weight for boerewors, and every other ingredient scales
+with it in metric or imperial units.
 
 There is no build step. It's plain HTML, CSS and vanilla JavaScript, meant to run
 as-is from GitHub Pages or any static file host.

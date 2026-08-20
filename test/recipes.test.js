@@ -21,8 +21,8 @@ test('computeScaleFactor is 1 at each recipe baseline', () => {
   assert.equal(computeScaleFactor(BOEREWORS, BOEREWORS.beefBaseline), 1);
 });
 
-test('scaling droëwors to its baseline (800 g) reproduces the exact baseline quantities', () => {
-  const { factor, ingredients } = scaleRecipe(DROEWORS, 800);
+test('scaling droëwors to its total beef baseline (1,000 g) reproduces the exact quantities', () => {
+  const { factor, ingredients } = scaleRecipe(DROEWORS, 1000);
   assert.equal(factor, 1);
 
   const byKey = Object.fromEntries(ingredients.map((i) => [i.key, i.amount]));
@@ -53,8 +53,8 @@ test('scaling boerewors to its baseline (600 g) reproduces the exact baseline qu
   assert.equal(byKey.worcestershire, 15);
 });
 
-test('doubling the entered beef mass doubles every ingredient', () => {
-  const { ingredients } = scaleRecipe(DROEWORS, 1600);
+test('doubling the entered total beef mass doubles every droëwors ingredient', () => {
+  const { ingredients } = scaleRecipe(DROEWORS, 2000);
   const byKey = Object.fromEntries(ingredients.map((i) => [i.key, i.amount]));
   assert.equal(byKey.beef, 1600);
   assert.equal(byKey.fat, 400);
@@ -71,7 +71,7 @@ test('halving the entered beef mass halves every ingredient', () => {
 });
 
 test('scaleRecipe totalGrams sums meat and spice mass but excludes liquids', () => {
-  const { totalGrams } = scaleRecipe(DROEWORS, 800);
+  const { totalGrams } = scaleRecipe(DROEWORS, 1000);
   // 800 beef + 200 fat + 20 salt + 12 coriander + 2.5 pepper + 0.5 cloves + 0.5 nutmeg
   assert.equal(totalGrams, 1035.5);
 });

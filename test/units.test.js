@@ -89,9 +89,9 @@ test('formatTemperature switches unit label with system', () => {
 });
 
 test('inputToGrams / gramsToInput read and write the beef amount in kg or lb', () => {
-  // Entering 0.8 kg in metric mode is the droëwors baseline: 800 g.
-  assert.equal(inputToGrams(0.8, 'metric'), 800);
-  assert.equal(gramsToInput(800, 'metric'), 0.8);
+  // Entering 1 kg in metric mode is the droëwors total-beef baseline.
+  assert.equal(inputToGrams(1, 'metric'), 1000);
+  assert.equal(gramsToInput(1000, 'metric'), 1);
 
   // Entering 0.6 kg in metric mode is the boerewors baseline: 600 g.
   assert.equal(inputToGrams(0.6, 'metric'), 600);

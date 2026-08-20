@@ -28,7 +28,7 @@ export const DROEWORS = {
   id: 'droewors',
   name: 'Droëwors',
   tagline: 'Air-dried spiced beef sausage',
-  beefBaseline: 800,
+  beefBaseline: 1000,
   ingredients: [
     { key: 'beef', label: 'Lean beef', category: 'meat', baseline: 800 },
     { key: 'fat', label: 'Beef fat', category: 'meat', baseline: 200 },
