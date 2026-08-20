@@ -294,6 +294,56 @@ function initHeroPeel() {
   applyMode();
 }
 
+/**
+ * Fades the overlapping recipe ledger from translucent to solid parchment as
+ * it clears the hero. The custom property changes paint only, so the overlap
+ * stays fixed and never causes a layout jump.
+ */
+function initRecipeReveal() {
+  const hero = document.querySelector('#hero');
+  const main = document.querySelector('#main');
+  if (!hero || !main) return;
+
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let frameRequested = false;
+
+  function updateReveal() {
+    frameRequested = false;
+
+    if (reducedMotionQuery.matches) {
+      main.style.setProperty('--recipe-reveal', '1');
+      return;
+    }
+
+    const heroRect = hero.getBoundingClientRect();
+    const heroTop = window.scrollY + heroRect.top;
+    const stickyRunway = Math.max(heroRect.height - window.innerHeight, 0);
+    const revealEnd = hero.classList.contains('hero--peel')
+      ? heroTop + stickyRunway
+      : heroTop + heroRect.height;
+    const revealDistance = Math.min(Math.max(window.innerHeight * 0.35, 180), 420);
+    const revealStart = Math.max(0, revealEnd - revealDistance);
+    const progress = Math.min(
+      Math.max((window.scrollY - revealStart) / Math.max(revealEnd - revealStart, 1), 0),
+      1,
+    );
+    const eased = progress * progress * (3 - 2 * progress);
+
+    main.style.setProperty('--recipe-reveal', eased.toFixed(3));
+  }
+
+  function requestRevealUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateReveal);
+  }
+
+  window.addEventListener('scroll', requestRevealUpdate, { passive: true });
+  window.addEventListener('resize', requestRevealUpdate);
+  addMediaQueryListener(reducedMotionQuery, requestRevealUpdate);
+  requestRevealUpdate();
+}
+
 function init() {
   readUrlState();
   for (const recipe of RECIPES) {
@@ -302,6 +352,7 @@ function init() {
   initUnitToggle();
   initYear();
   initHeroPeel();
+  initRecipeReveal();
   renderAll();
 }
 
