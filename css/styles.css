@@ -295,7 +295,7 @@ a {
   max-width: none;
   margin: 0;
   padding: 0;
-  height: 132vh;
+  height: calc(100vh + clamp(4rem, 6vw, 6rem));
 }
 
 .hero--peel .hero__pin {
@@ -314,6 +314,10 @@ a {
   transform-style: preserve-3d;
   transform-origin: 50% 0%;
   will-change: transform, opacity;
+}
+
+.hero--peel + main {
+  margin-top: clamp(-20rem, -28vh, -12rem);
 }
 
 /* ---------- Layout ---------- */
