@@ -2,6 +2,8 @@
 // No DOM access here. Everything is derived from a single entered beef
 // mass so it can be unit tested without a browser.
 
+import { gramsToPounds } from './units.js';
+
 /**
  * @typedef {Object} Ingredient
  * @property {string} key
@@ -137,10 +139,10 @@ export function validateBeefGrams(grams) {
     return 'Enter a quantity greater than zero.';
   }
   if (grams < MIN_BEEF_GRAMS) {
-    return `Enter at least ${MIN_BEEF_GRAMS} g (about ${(MIN_BEEF_GRAMS / 28.349523125).toFixed(1)} oz).`;
+    return `Enter at least ${(MIN_BEEF_GRAMS / 1000).toFixed(2)} kg (about ${gramsToPounds(MIN_BEEF_GRAMS).toFixed(2)} lb).`;
   }
   if (grams > MAX_BEEF_GRAMS) {
-    return `Enter at most ${MAX_BEEF_GRAMS.toLocaleString('en-US')} g (about ${(MAX_BEEF_GRAMS / 1000).toFixed(0)} kg).`;
+    return `Enter at most ${(MAX_BEEF_GRAMS / 1000).toFixed(0)} kg (about ${gramsToPounds(MAX_BEEF_GRAMS).toFixed(1)} lb).`;
   }
   return null;
 }

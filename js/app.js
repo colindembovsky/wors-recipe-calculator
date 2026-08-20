@@ -8,6 +8,7 @@ import {
   formatSpiceGrams,
   formatLiquidTbsp,
   formatTemperature,
+  formatBeefAmount,
   inputToGrams,
   gramsToInput,
 } from './units.js';
@@ -111,7 +112,7 @@ function renderRecipe(recipe) {
   errorEl.textContent = '';
 
   const unitLabel = card.querySelector('.beef-unit-label');
-  unitLabel.textContent = unitSystem === 'imperial' ? 'oz' : 'g';
+  unitLabel.textContent = unitSystem === 'imperial' ? 'lb' : 'kg';
 
   const { totalGrams, ingredients } = scaleRecipe(recipe, grams);
 
@@ -134,6 +135,12 @@ function renderRecipe(recipe) {
 
   const casingEl = card.querySelector('.casing-note');
   if (casingEl) casingEl.textContent = recipe.casing;
+
+  const resetButton = card.querySelector('.reset-button');
+  if (resetButton) {
+    const baseline = formatBeefAmount(recipe.beefBaseline, unitSystem);
+    resetButton.textContent = `Reset to ${baseline.text} baseline`;
+  }
 
   card.querySelectorAll('[data-temp-c]').forEach((el) => {
     const celsius = Number(el.dataset.tempC);
